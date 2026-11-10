@@ -1,0 +1,3 @@
+import ActionGrid from "../../components/ActionGrid";
+export default function Dashboard(){return <><div className="role-title"><h3>Operación y gestión del vehículo</h3></div><ActionGrid className="three-cols" actions={[
+{label:"Control GPS",path:"/conductor/gps"},{label:"Reportar tráfico o incidencias",path:"/conductor/reportes"},{label:"Historial de desempeño",path:"/conductor/historial"},{label:"Gestionar ruta asignada",path:"/conductor/rutas"},{label:"Registrar recolección",path:"/conductor/recoleccion"},{label:"Validar recolección",path:"/conductor/validacion"},{label:"Priorizar reportes ciudadanos",path:"/conductor/prioridad"},{label:"Horario laboral",path:"/conductor/horario"},{label:"Reportar fallas del vehículo",path:"/conductor/fallas"}]}/></>}

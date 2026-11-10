@@ -1,0 +1,3 @@
+import ActionGrid from "../../components/ActionGrid";
+export default function Dashboard(){return <><div className="role-title"><h3>Gestión operativa del sistema</h3></div><ActionGrid actions={[
+{label:"Control GPS",path:"/funcionario/gps"},{label:"Reportar operación",path:"/funcionario/reportes"},{label:"Historial de desempeño",path:"/funcionario/historial"},{label:"Gestionar ruta",path:"/funcionario/rutas"},{label:"Registrar residuos",path:"/funcionario/basura"},{label:"Validar recolección",path:"/funcionario/validacion"},{label:"Priorizar reportes",path:"/funcionario/prioridad"},{label:"Horario laboral",path:"/funcionario/horario"}]}/></>}
