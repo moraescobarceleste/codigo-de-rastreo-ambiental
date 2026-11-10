@@ -5,4 +5,5 @@ export const pool = mysql.createPool({
   ...env.db,
   waitForConnections: true,
   connectionLimit: 10,
+  enableKeepAlive: true,
 });

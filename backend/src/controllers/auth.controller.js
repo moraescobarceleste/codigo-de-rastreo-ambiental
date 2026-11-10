@@ -1,5 +1,8 @@
 import * as authService from "../services/auth.service.js";
 import { HttpError } from "../middlewares/httpError.js";
+import { env } from "../config/env.js";
+
+const ROLES = ["ciudadano", "funcionario", "administrador", "conductor"];
 
 export async function login(req, res) {
   const { correo, password } = req.body;
@@ -17,6 +20,17 @@ export async function register(req, res) {
   const { nombre, apellido, correo, password, tipo_usuario } = req.body;
   if (!nombre || !apellido || !correo || !password || !tipo_usuario) {
     throw new HttpError(400, "Completa los campos obligatorios.");
+  }
+
+  if (!ROLES.includes(tipo_usuario)) {
+    throw new HttpError(400, "Tipo de usuario no válido.");
+  }
+  // Evita que cualquiera se registre como administrador/funcionario/conductor
+  if (tipo_usuario !== "ciudadano" && !env.allowPrivilegedSignup) {
+    throw new HttpError(
+      403,
+      "El registro público solo permite ciudadanos. Las demás cuentas las crea un administrador."
+    );
   }
 
   await authService.registrarUsuario(req.body);
