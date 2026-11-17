@@ -111,6 +111,21 @@ proyecto-sena-rastreo/
 
 En desarrollo. Pendiente: conectar el login del frontend a la API, proteger rutas con la sesión
 del servidor y crear los endpoints de camiones, rutas, reportes y reciclaje.
+## Con Docker
+
+Requiere Docker Desktop (o Docker y Docker Compose). Desde la raíz del proyecto:
+
+```bash
+docker compose up --build
+```
+
+- Frontend: http://localhost:8080
+- API: http://localhost:3000/api/health
+
+Para detener: `docker compose down` (agrega `-v` para borrar también la base de datos).
+
+Opcional: crea un archivo `.env` en la raíz con `DB_PASSWORD`, `DB_NAME` y `SESSION_SECRET` para cambiar los valores por defecto.
+
 
 ## Integrantes
 
