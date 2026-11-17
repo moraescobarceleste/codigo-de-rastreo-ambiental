@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/ambiental2.png";
+import { login } from "../../services/api";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -8,28 +9,32 @@ export default function Login() {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setCargando(true);
 
-    if (
-      correo === "admin@rastreo.com" &&
-      password === "123456"
-    ) {
+    try {
+      const { user } = await login(correo, password);
+
       localStorage.setItem(
         "usuario",
         JSON.stringify({
-          nombre: "Administrador",
-          correo: "admin@rastreo.com",
-          tipo_usuario: "administrador",
+          id_usuario: user.id_usuario,
+          nombre: user.nombre,
+          correo,
+          tipo_usuario: user.tipo_usuario,
         })
       );
 
-      navigate("/administrador/dashboard");
-      return;
+      navigate(`/${user.tipo_usuario}/dashboard`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo iniciar sesión");
+    } finally {
+      setCargando(false);
     }
-
-    setError("Correo o contraseña incorrectos");
   };
 
   return (
@@ -43,16 +48,9 @@ export default function Login() {
 
         <h1>Iniciar sesión</h1>
 
-        <form
-          className="login-form"
-          onSubmit={handleLogin}
-        >
-
+        <form className="login-form" onSubmit={handleLogin}>
           <div>
-            <label htmlFor="correo">
-              Correo electrónico
-            </label>
-
+            <label htmlFor="correo">Correo electrónico</label>
             <input
               id="correo"
               type="email"
@@ -64,10 +62,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label htmlFor="password">
-              Contraseña
-            </label>
-
+            <label htmlFor="password">Contraseña</label>
             <input
               id="password"
               type="password"
@@ -78,21 +73,12 @@ export default function Login() {
             />
           </div>
 
-          {error && (
-            <p className="login-error">
-              {error}
-            </p>
-          )}
+          {error && <p className="login-error">{error}</p>}
 
-          <button
-            type="submit"
-            className="login-button"
-          >
-            Iniciar sesión
+          <button type="submit" className="login-button" disabled={cargando}>
+            {cargando ? "Ingresando..." : "Iniciar sesión"}
           </button>
-
         </form>
-
       </div>
     </div>
   );
