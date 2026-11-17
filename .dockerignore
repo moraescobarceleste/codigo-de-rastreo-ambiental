@@ -1,0 +1,5 @@
+.git
+*.zip
+docs
+practicas
+node_modules
