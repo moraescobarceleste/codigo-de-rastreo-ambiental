@@ -18,7 +18,6 @@ function mapDbError(error) {
   }
 }
 
-// eslint-disable-next-line no-unused-vars
 export function errorHandler(error, _req, res, _next) {
   const mapped = error instanceof HttpError ? error : mapDbError(error);
   if (mapped) {

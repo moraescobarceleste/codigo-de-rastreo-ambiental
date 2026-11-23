@@ -20,7 +20,11 @@ export default function AdminLayout() {
   const navigate = useNavigate();
 
   async function handleLogout() {
-    try { await logout(); } catch {}
+    try {
+      await logout();
+    } catch {
+      // Si el servidor no responde igual se limpia la sesión local y se sale
+    }
     localStorage.removeItem("usuario");
     navigate("/login");
   }

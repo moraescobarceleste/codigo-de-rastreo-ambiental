@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, Link } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../services/api";
 import logo from "../assets/ambiental2.png";
 
@@ -11,7 +11,11 @@ export default function RoleLayout({ role, subtitle }: Props) {
   const navigate = useNavigate();
 
   async function handleLogout() {
-    try { await logout(); } catch {}
+    try {
+      await logout();
+    } catch {
+      // Si el servidor no responde igual se limpia la sesión local y se sale
+    }
     localStorage.removeItem("usuario");
     navigate("/login");
   }
