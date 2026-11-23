@@ -1,26 +1,44 @@
+import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { apiRequest } from "../services/api";
 
 interface ProtectedRouteProps {
   role: string;
 }
 
+type Estado = "cargando" | "autorizado" | "sin-sesion" | "sin-permiso";
+
+/**
+ * Protege las rutas por rol. La decisión la toma el SERVIDOR (GET /session);
+ * localStorage solo guarda datos de apariencia, nunca autoriza el acceso.
+ */
 export default function ProtectedRoute({ role }: ProtectedRouteProps) {
-  const usuario = localStorage.getItem("usuario");
+  const [estado, setEstado] = useState<Estado>("cargando");
 
-  if (!usuario) {
-    return <Navigate to="/login" replace />;
-  }
+  useEffect(() => {
+    let activo = true;
 
-  try {
-    const datos = JSON.parse(usuario);
+    apiRequest<{ user: { tipo_usuario: string } | null }>("/session")
+      .then(({ user }) => {
+        if (!activo) return;
+        if (!user) {
+          localStorage.removeItem("usuario");
+          setEstado("sin-sesion");
+        } else {
+          setEstado(user.tipo_usuario === role ? "autorizado" : "sin-permiso");
+        }
+      })
+      .catch(() => {
+        if (activo) setEstado("sin-sesion");
+      });
 
-    if (datos.tipo_usuario !== role) {
-      return <Navigate to="/" replace />;
-    }
+    return () => {
+      activo = false;
+    };
+  }, [role]);
 
-    return <Outlet />;
-  } catch {
-    localStorage.removeItem("usuario");
-    return <Navigate to="/login" replace />;
-  }
+  if (estado === "cargando") return <p style={{ padding: "2rem" }}>Verificando sesión...</p>;
+  if (estado === "sin-sesion") return <Navigate to="/login" replace />;
+  if (estado === "sin-permiso") return <Navigate to="/" replace />;
+  return <Outlet />;
 }

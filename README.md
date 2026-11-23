@@ -34,8 +34,6 @@ proyecto-sena-rastreo/
 │       ├── routes/           protección de rutas
 │       ├── services/         llamadas a la API
 │       └── styles/           CSS global
-├── database/
-│   └── schema.sql            creación de la base de datos y tablas
 ├── docs/
 │   ├── requisitos/           SRS, casos de uso, modelos conceptuales
 │   ├── diagramas/            MER y diagrama de actividades
@@ -61,7 +59,7 @@ proyecto-sena-rastreo/
 2. **Crear la base de datos**
 
    ```bash
-   mysql -u root -p < database/schema.sql
+   npm --prefix backend run db:init
    ```
 
 3. **Configurar variables de entorno**
@@ -101,7 +99,7 @@ proyecto-sena-rastreo/
 
 ## Cómo agregar un módulo nuevo (ejemplo: camiones)
 
-1. `database/schema.sql`: agregar la tabla.
+1. `backend/database/schema.sql`: agregar la tabla.
 2. `backend/src/services/camiones.service.js`: consultas SQL.
 3. `backend/src/controllers/camiones.controller.js`: manejo de la petición.
 4. `backend/src/routes/camiones.routes.js` y montarlo en `routes/index.js`.

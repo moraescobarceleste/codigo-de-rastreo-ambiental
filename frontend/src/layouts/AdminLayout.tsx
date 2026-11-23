@@ -21,7 +21,7 @@ export default function AdminLayout() {
 
   async function handleLogout() {
     try { await logout(); } catch {}
-    localStorage.removeItem("rastreoUser");
+    localStorage.removeItem("usuario");
     navigate("/login");
   }
 
