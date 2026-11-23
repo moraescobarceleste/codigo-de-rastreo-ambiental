@@ -94,3 +94,74 @@ export const rutasApi = {
     apiRequest<{ ruta: Ruta }>("/rutas", { method: "POST", body: json(data) }).then((r) => r.ruta),
   eliminar: (id: number) => apiRequest<{ message: string }>(`/rutas/${id}`, { method: "DELETE" }),
 };
+
+/* ---------- Reportes, asignaciones y conductores ---------- */
+
+export type TipoReporte = "acumulacion" | "recoleccion_omitida" | "punto_critico" | "otro";
+export type EstadoReporte = "recibido" | "en_revision" | "resuelto" | "descartado";
+
+export type Reporte = {
+  id_reporte: number;
+  tipo: TipoReporte;
+  descripcion: string;
+  direccion: string;
+  estado: EstadoReporte;
+  fecha_creacion: string;
+  ciudadano?: string;
+};
+
+export type EstadoAsignacion = "programada" | "en_curso" | "completada" | "cancelada";
+
+export type Asignacion = {
+  id_asignacion: number;
+  fecha: string;
+  estado: EstadoAsignacion;
+  id_ruta: number;
+  ruta: string;
+  id_camion: number;
+  placa: string;
+  id_conductor: number;
+  conductor: string;
+};
+
+export type Conductor = {
+  id_conductor: number;
+  nombre: string;
+  correo: string;
+  telefono: string | null;
+  num_documento: string | null;
+  licencia: string | null;
+};
+
+export const reportesApi = {
+  listar: () => apiRequest<{ reportes: Reporte[] }>("/reportes").then((r) => r.reportes),
+  crear: (data: { tipo: TipoReporte; descripcion: string; direccion: string }) =>
+    apiRequest<{ reporte: Reporte }>("/reportes", { method: "POST", body: json(data) }).then((r) => r.reporte),
+  cambiarEstado: (id: number, estado: EstadoReporte) =>
+    apiRequest<{ reporte: Reporte }>(`/reportes/${id}/estado`, { method: "PATCH", body: json({ estado }) }).then(
+      (r) => r.reporte
+    ),
+};
+
+export const asignacionesApi = {
+  listar: () => apiRequest<{ asignaciones: Asignacion[] }>("/asignaciones").then((r) => r.asignaciones),
+  crear: (data: { id_ruta: number; id_camion: number; id_conductor: number; fecha: string }) =>
+    apiRequest<{ asignacion: Asignacion }>("/asignaciones", { method: "POST", body: json(data) }).then(
+      (r) => r.asignacion
+    ),
+  cambiarEstado: (id: number, estado: EstadoAsignacion) =>
+    apiRequest<{ asignacion: Asignacion }>(`/asignaciones/${id}/estado`, {
+      method: "PATCH",
+      body: json({ estado }),
+    }).then((r) => r.asignacion),
+  eliminar: (id: number) => apiRequest<{ message: string }>(`/asignaciones/${id}`, { method: "DELETE" }),
+};
+
+export const conductoresApi = {
+  listar: () => apiRequest<{ conductores: Conductor[] }>("/conductores").then((r) => r.conductores),
+};
+
+export function formatearFecha(valor: string) {
+  const f = new Date(valor);
+  return Number.isNaN(f.getTime()) ? valor : f.toLocaleDateString("es-CO", { timeZone: "UTC" });
+}

@@ -4,6 +4,7 @@ import camionesRoutes from "./camiones.routes.js";
 import rutasRoutes from "./rutas.routes.js";
 import asignacionesRoutes from "./asignaciones.routes.js";
 import reportesRoutes from "./reportes.routes.js";
+import conductoresRoutes from "./conductores.routes.js";
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use("/camiones", camionesRoutes);
 router.use("/rutas", rutasRoutes);
 router.use("/asignaciones", asignacionesRoutes);
 router.use("/reportes", reportesRoutes);
+router.use("/conductores", conductoresRoutes);
 
 export default router;

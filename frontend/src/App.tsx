@@ -31,6 +31,7 @@ import ReportesCiudadano from "./pages/Ciudadano/Reportes";
 
 // CONDUCTOR
 import ConductorDashboard from "./pages/Conductor/Dashboard";
+import RutasConductor from "./pages/Conductor/Rutas";
 
 // FUNCIONARIO
 import FuncionarioDashboard from "./pages/Funcionario/Dashboard";
@@ -167,15 +168,7 @@ export default function App() {
             }
           />
 
-          <Route
-            path="rutas"
-            element={
-              <GenericModule
-                title="Rutas"
-                back="/conductor/dashboard"
-              />
-            }
-          />
+          <Route path="rutas" element={<RutasConductor />} />
 
           <Route
             path="recoleccion"

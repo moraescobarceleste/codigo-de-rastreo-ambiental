@@ -69,6 +69,13 @@ test("rutas: el conductor y el ciudadano no pueden gestionar", async () => {
   assert.equal((await llamar("DELETE", "/rutas/1", { rol: "funcionario" })).status, 403);
 });
 
+test("conductores: solo administrador y funcionario pueden listar", async () => {
+  assert.equal((await llamar("GET", "/conductores")).status, 401);
+  for (const rol of ["ciudadano", "conductor"]) {
+    assert.equal((await llamar("GET", "/conductores", { rol })).status, 403, `GET como ${rol}`);
+  }
+});
+
 test("asignaciones: el ciudadano no accede", async () => {
   assert.equal((await llamar("GET", "/asignaciones", { rol: "ciudadano" })).status, 403);
   assert.equal((await llamar("POST", "/asignaciones", { rol: "conductor", cuerpo: {} })).status, 403);

@@ -6,4 +6,6 @@ export const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   enableKeepAlive: true,
+  // Las columnas DATE (ej. fecha de asignación) llegan como 'AAAA-MM-DD' y no se corren de día por zona horaria
+  dateStrings: ["DATE"],
 });
