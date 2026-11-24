@@ -1,0 +1,21 @@
+# EQUIPO A - Base de datos (MySQL)
+services:
+  db:
+    image: mysql:8.0
+    container_name: rastreo-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en el archivo .env}
+      MYSQL_DATABASE: ${DB_NAME:-rastreo_ambiental}
+    ports:
+      - "3306:3306"          # permite conexiones desde otros equipos de la red
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  db_data:

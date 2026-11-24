@@ -1,0 +1,17 @@
+# EQUIPO C - Frontend (pagina web + nginx)
+services:
+  frontend:
+    build:
+      context: ../../frontend
+      args:
+        VITE_API_URL: /api   # el navegador llama a /api y nginx lo reenvia al equipo B
+    container_name: rastreo-frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_HOST: ${BACKEND_HOST:?Define BACKEND_HOST (IP del equipo B) en el archivo .env}
+      BACKEND_PORT: 3000
+    volumes:
+      # nginx reemplaza BACKEND_HOST y BACKEND_PORT al arrancar
+      - ./default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    ports:
+      - "8080:80"
